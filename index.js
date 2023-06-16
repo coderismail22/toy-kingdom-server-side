@@ -32,6 +32,58 @@ async function run() {
         .db("toykingdom")
         .collection("engineeringtoys");
       const userAdded = client.db("toykingdom").collection("usertoys");
+     // Get Operations
+     app.get("/mathtoys", async (req, res) => {
+        const cursor = mathToys.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      });
+      app.get("/sciencetoys", async (req, res) => {
+        const cursor = scienceToys.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      });
+      app.get("/engineeringtoys", async (req, res) => {
+        const cursor = engineeringToys.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      });
   
+   
+    // Find one toy
 
+    app.get("/toy/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const options = {
+          projection: {
+            photo: 1,
+            name: 1,
+            seller: 1,
+            sellerMail: 1,
+            price: 1,
+            rating: 1,
+            quantity: 1,
+            description: 1,
+          },
+        };
+  
+        let toy;
+  
+        toy = await mathToys.findOne(query, options);
+        if (!toy) {
+          toy = await scienceToys.findOne(query, options);
+        }
+        if (!toy) {
+          toy = await userAdded.findOne(query, options);
+        }
+        if (!toy) {
+          toy = await engineeringToys.findOne(query, options);
+        }
+  
+        res.send(toy);
+      });
+  
+  
+  
 
