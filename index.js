@@ -21,6 +21,17 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-
+async function run() {
+    try {
+      // Connect the client to the server	(optional starting in v4.7)
+      await client.connect();
+  
+      const mathToys = client.db("toykingdom").collection("mathtoys");
+      const scienceToys = client.db("toykingdom").collection("sciencetoys");
+      const engineeringToys = client
+        .db("toykingdom")
+        .collection("engineeringtoys");
+      const userAdded = client.db("toykingdom").collection("usertoys");
+  
 
 
