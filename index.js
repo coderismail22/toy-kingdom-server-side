@@ -137,4 +137,43 @@ async function run() {
         res.send(result);
       });
   
+      // DELETE A TOY
+      app.delete("/toy/:id", async (req, res) => {
+        const id = req.params.id;
   
+        const query = {
+          _id: new ObjectId(id),
+        };
+  
+        let result;
+  
+        // Check if the toy exists
+        const mathToy = await mathToys.findOne(query);
+        if (mathToy) {
+          result = await mathToys.deleteOne(query);
+        } else {
+          const scienceToy = await scienceToys.findOne(query);
+          if (scienceToy) {
+            result = await scienceToys.deleteOne(query);
+          } else {
+            const engineeringToy = await engineeringToys.findOne(query);
+            if (engineeringToy) {
+              result = await engineeringToys.deleteOne(query);
+            } else {
+              const userAddedToy = await userAdded.findOne(query);
+              if (userAddedToy) {
+                result = await userAdded.deleteOne(query);
+              } else {
+                // Toy not found
+                return res.status(404).send("Toy not found.");
+              }
+            }
+          }
+        }
+  
+        if (result.deletedCount > 0) {
+          res.send({ deletedCount: result.deletedCount });
+        } else {
+          res.status(404).send("Toy not found.");
+        }
+      });
