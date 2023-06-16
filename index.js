@@ -122,4 +122,19 @@ async function run() {
     });
 
 
-
+    // UPDATE A TOY
+    app.patch("/addatoy", async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const updateToy = req.body;
+        console.log(updateToy);
+        const updateDoc = {
+          $set: {
+            status: updateToy.status,
+          },
+        };
+        const result = await userAdded.updateOne(filter, updateDoc);
+        res.send(result);
+      });
+  
+  
