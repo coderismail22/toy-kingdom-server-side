@@ -85,5 +85,14 @@ async function run() {
       });
   
   
+      // Add a toy
+      app.post("/addatoy", async (req, res) => {
+        const toy = req.body;
+        console.log(toy);
+        const result = await userAdded.insertOne(toy);
+        res.send(result);
+      });
+  
+  
   
 
