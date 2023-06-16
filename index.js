@@ -94,5 +94,15 @@ async function run() {
       });
   
   
+      // Get My Toys
+      app.get("/addatoy", async (req, res) => {
+        let query = {};
+        if (req.query?.email) {
+          query = { email: req.query.email };
+        }
+        const result = await userAdded.find(query).toArray();
+        res.send(result);
+      });
+  
   
 
