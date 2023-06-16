@@ -105,4 +105,21 @@ async function run() {
       });
   
   
+    // Get All Toy of All Users
+    const mathToysData = await mathToys.find().toArray();
+    const scienceToysData = await scienceToys.find().toArray();
+    const engineeringToysData = await engineeringToys.find().toArray();
+    const userAddedData = await userAdded.find().toArray();
+    const allToys = [
+      ...mathToysData,
+      ...scienceToysData,
+      ...engineeringToysData,
+      ...userAddedData,
+    ];
+
+    app.get("/alltoys", async (req, res) => {
+      res.send(allToys);
+    });
+
+
 
