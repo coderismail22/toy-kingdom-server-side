@@ -5,14 +5,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware configuration:
-app.use(
-  cors({
-    origin: '*',
-  })
-);
+const corsConfig = {
+  origin:'*',
+  credentials:true,
+  methods:['GET','POST','PUT','DELETE','PATCH']
+}
+app.use(cors(corsConfig));
 app.use(express.json());
-
-//
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.VITE_USERNAME}:${process.env.VITE_USERPASS}@cluster0.4in3v8j.mongodb.net/?retryWrites=true&w=majority`;
@@ -28,7 +27,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const mathToys = client.db("toykingdom").collection("mathtoys");
     const scienceToys = client.db("toykingdom").collection("sciencetoys");
@@ -92,6 +91,7 @@ async function run() {
       const toy = req.body;
       console.log(toy);
       const result = await userAdded.insertOne(toy);
+      console.log(result)
       res.send(result);
     });
 
@@ -188,7 +188,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-//
 
 app.get("/", (req, res) => {
   res.send("Toy Kindom is running");
